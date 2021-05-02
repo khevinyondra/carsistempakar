@@ -15,13 +15,13 @@ class CreateRulesTable extends Migration
     {
         Schema::create('rules', function (Blueprint $table) {
             $table->id();
-            $tale->string('pertanyaan1', 5);
-            $tale->string('pertanyaan_a', 8);
-            $tale->string('pertanyaan_b', 8);
-            $tale->string('pertanyaan_c', 8);
-            $tale->string('pertanyaan_d', 8);
-            $tale->string('kesimpulan', 50);
-            $tale->string('solusi', 100);
+            $table->string('pertanyaan1', 5);
+            $table->string('pertanyaan_a', 8);
+            $table->string('pertanyaan_b', 8);
+            $table->string('pertanyaan_c', 8);
+            $table->string('pertanyaan_d', 8);
+            $table->string('kesimpulan', 50);
+            $table->string('solusi', 100);
             $table->timestamps();
         });
     }
