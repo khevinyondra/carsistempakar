@@ -20,8 +20,8 @@ class CreateRulesTable extends Migration
             $table->string('pertanyaan_b', 8);
             $table->string('pertanyaan_c', 8);
             $table->string('pertanyaan_d', 8);
-            $table->string('kesimpulan', 50);
-            $table->string('solusi', 100);
+            $table->string('kesimpulan');
+            $table->text('solusi');
             $table->timestamps();
         });
     }
