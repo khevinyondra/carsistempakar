@@ -15,14 +15,14 @@ class CreateHasilTable extends Migration
     {
         Schema::create('hasil', function (Blueprint $table) {
             $table->id();
-            $tale->string('Nama', 30);
-            $tale->string('Plat_Nomor', 20);
-            $tale->string('pertanyaan1', 5);
-            $tale->string('pertanyaan_a', 8)->nullable();
-            $tale->string('pertanyaan_b', 8)->nullable();
-            $tale->string('pertanyaan_c', 8)->nullable();
-            $tale->string('pertanyaan_d', 8)->nullable();
-            $tale->string('kesimpulan', 50);
+            $table->string('Nama', 30);
+            $table->string('Plat_Nomor', 20);
+            $table->string('pertanyaan1', 5);
+            $table->string('pertanyaan_a', 8)->nullable();
+            $table->string('pertanyaan_b', 8)->nullable();
+            $table->string('pertanyaan_c', 8)->nullable();
+            $table->string('pertanyaan_d', 8)->nullable();
+            $table->string('kesimpulan', 50);
             $table->timestamps();
         });
     }
