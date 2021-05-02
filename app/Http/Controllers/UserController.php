@@ -48,7 +48,7 @@ class UserController extends Controller
 
         }
         else{
-            return view('FormLogin');
+            return view('formlogin');
         }
 
     }
