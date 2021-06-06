@@ -30,7 +30,7 @@ class UserController extends Controller
             $kerusakan13 = Hasil::where('kesimpulan','Kopling rusak dan kampas kopling sudah aus')->count('kesimpulan');
             $total = Hasil::count('kesimpulan');
 
-            return view('adminpage',compact('items','kerusakan1','kerusakan2','kerusakan3','kerusakan4','kerusakan5','kerusakan6','kerusakan7','kerusakan8','kerusakan9','kerusakan10','kerusakan11','kerusakan12','kerusakan13','total'));
+            return view('dashboard',compact('items','kerusakan1','kerusakan2','kerusakan3','kerusakan4','kerusakan5','kerusakan6','kerusakan7','kerusakan8','kerusakan9','kerusakan10','kerusakan11','kerusakan12','kerusakan13','total'));
         }
     }
     public function indexhasildiagnosa(){
@@ -44,7 +44,7 @@ class UserController extends Controller
 
     public function login(){
         if(session('login')){
-            return redirect('/home_user');
+            return redirect()->route('dashboard');
 
         }
         else{
@@ -64,7 +64,7 @@ class UserController extends Controller
                 $request->session()->put('name',$data->name);
                 $request->session()->put('email',$data->email);
                 $request->session()->put('login',TRUE);
-                return redirect('home_user');
+                return redirect()->route('dashboard');
             }
             else{
                 return redirect('login');

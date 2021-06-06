@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiagnosaController;
+use App\Http\Controllers\QuestionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ use App\Http\Controllers\DiagnosaController;
 // });
 
 Route::post('/diagnosisresult', [DiagnosaController::class, 'diagnosisresult']);
+Route::get('/question', [QuestionsController::class, 'getQuestion']);

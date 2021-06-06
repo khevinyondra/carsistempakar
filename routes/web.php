@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DiagnosaController;
+use App\Http\Controllers\QuestionsController;
+use App\Http\Controllers\RulesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +31,7 @@ Route::get('/contact', function () {
 Route::get('/help', function () {
     return view('help');
 });
-Route::get('/home_user', [UserController::class, 'index']);
+Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
 Route::get('/tabeldiagnosa', [UserController::class, 'indexhasildiagnosa']);
 Route::get('/login', [UserController::class, 'login']);
 Route::post('/loginPost', [UserController::class, 'loginPost']);
@@ -38,3 +40,9 @@ Route::post('/registerPost', [UserController::class, 'registerPost']);
 Route::get('/logout', [UserController::class, 'logout']);
 Route::post('/diagnosisresult', [DiagnosaController::class, 'diagnosisresult']);
 Route::post('/hapusdata', [DiagnosaController::class, 'hapus']);
+
+// Route::prefix('questions')->group(function() {
+//     Route::get('/', [])->name('index');
+// });
+Route::resource('questions', QuestionsController::class);
+Route::resource('rules', RulesController::class);
