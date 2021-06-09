@@ -16,31 +16,22 @@ class DiagnosaController extends Controller
             abort(404);
         } 
         else {
-            DB::beginTransaction();
+            $request->validate([
+                'member_id' => 'required',
+            ]);
             try {
-                $kesimpulan = Rules::where('pertanyaan1', $request->pertanyaan1)
-                    ->orWhere('pertanyaan_a', $request->pertanyaanA)
-                    ->orWhere('pertanyaan_b', $request->pertanyaanB)
-                    ->orWhere('pertanyaan_c', $request->pertanyaanC)
-                    ->orWhere('pertanyaan_d', $request->pertanyaanD)
-                    ->first();
+                $hasil = Hasil::with('rules')->findOrFail($request->input('member_id'));
+                $result = [
+                    'name' => $hasil->nama,
+                    'license_plate' => $hasil->plat_nomor,
+                    'conclusion' => $hasil->rules->kesimpulan,
+                    'solution' => $hasil->rules->solusi,
+                ];
 
-                $data =  new Hasil();
-                $data->Nama = $request->nama;
-                $data->Plat_Nomor = $request->plat_nomor;
-                $data->pertanyaan1 = $request->pertanyaan1;
-                $data->pertanyaan_a = $request->pertanyaanA;
-                $data->pertanyaan_b = $request->pertanyaanB;
-                $data->pertanyaan_c = $request->pertanyaanC;
-                $data->pertanyaan_d = $request->pertanyaanD;
-                $data->kesimpulan = $kesimpulan->kesimpulan;
-
-                $data->save();
-                DB::commit();
-                return Helpers::response(200, true, 'Successfully retrieve data', compact('kesimpulan'));
+                return Helpers::response(200, true, 'Successfully retrieve data', $result);
             }
             catch (\Exception $e) {
-                DB::rollBack();
+                // dd($e);
                 return Helpers::response(500, false, 'Failed to retrieve data');
             }
         }
@@ -50,6 +41,39 @@ class DiagnosaController extends Controller
     {
         $data = Hasil::findOrFail($request->id);
         $data->delete();
-        return redirect('home_user');
+        return redirect()->route('dashboard');
+    }
+
+    public function addMember(Request $request) {
+        if (! $request->ajax()) {
+            abort(404);
+        } 
+        else {
+            $request->validate([
+                'name' => 'required',
+                'license_plate' => 'required'
+            ]);
+            DB::beginTransaction();
+            try {
+                $data = [
+                    'nama' => $request->input('name'),
+                    'plat_nomor' => $request->input('license_plate'),
+                ];
+                $hasil = Hasil::create($data);
+                $result = [
+                    'member_id' => $hasil->id,
+                    'name' => $hasil->nama,
+                    'license_plate' => $hasil->plat_nomor,
+                ];
+
+                DB::commit();
+                return Helpers::response(200, true, 'Successfully added new member', $result);
+            } 
+            catch (\Exception $e) {
+                DB::rollBack();
+                // dd($e);
+                return Helpers::response(500, false, 'Failed to add new member');
+            }
+        }
     }
 }

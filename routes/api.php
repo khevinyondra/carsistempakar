@@ -22,3 +22,4 @@ use App\Http\Controllers\QuestionsController;
 
 Route::post('/diagnosisresult', [DiagnosaController::class, 'diagnosisresult']);
 Route::get('/question', [QuestionsController::class, 'getQuestion']);
+Route::post('/member/add', [DiagnosaController::class, 'addMember']);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Questions;
+use App\Models\Hasil;
+use App\Models\Rules;
 use App\Helpers\Helpers;
 
 class QuestionsController extends Controller
@@ -90,6 +92,8 @@ class QuestionsController extends Controller
             abort(404);
         } 
         else {
+            $request->validate(['member_id' => 'required']);
+            DB::beginTransaction();
             try {
                 $prev_question_code = $request->input('previous_question_code');
                 $prev_question_sequence = $request->input('previous_question_sequence');
@@ -104,6 +108,23 @@ class QuestionsController extends Controller
                             'pertanyaan' => null
                         ];
                     }
+
+                    $hasil = Hasil::findOrFail($request->input('member_id'));
+                    if ($prev_question_sequence === 1 && $prev_question_answer === true) {
+                        $rules = Rules::where('kode_pertanyaan', ucwords($prev_question_code))->first();
+                        $hasil->update([
+                            'rules_id' => $rules->id,
+                            'jawaban' => [true],
+                        ]);
+                    }
+
+                    $jawaban = $hasil->jawaban;
+                    $jawaban[$prev_question_sequence-1] = $prev_question_answer;
+                    if ($prev_question_sequence > 1) {
+                        $hasil->update([
+                            'jawaban' => $jawaban
+                        ]);
+                    }
                 } else {
                     $next_question = $this->getFirstQuestion();
                 }
@@ -113,9 +134,13 @@ class QuestionsController extends Controller
                     'sequence' => $next_question['urutan'],
                     'question' => $next_question['pertanyaan'],
                 ];
+
+                DB::commit();
                 return Helpers::response(200, true, 'Successfully retrieve data', compact('next_question'));
             }
             catch(\Exception $e) {
+                DB::rollback();
+                // dd($e);
                 return Helpers::response(500, false, 'Failed to retrieve data');
             }
             

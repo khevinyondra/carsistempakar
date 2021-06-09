@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Hasil;
 use App\Models\ModelUser;
+use App\Models\Rules;
 
 class UserController extends Controller
 {
@@ -14,23 +15,25 @@ class UserController extends Controller
             return redirect('login')->with('alert','Kamu harus login dulu');
         }
         else{
-            $items = Hasil::all();
-            $kerusakan1 = Hasil::where('kesimpulan','Kerusakan pada busi')->count('kesimpulan');
-            $kerusakan2 = Hasil::where('kesimpulan','Injektor Bermasalah')->count('kesimpulan');
-            $kerusakan3 = Hasil::where('kesimpulan','Premature Ignition')->count('kesimpulan');
-            $kerusakan4 = Hasil::where('kesimpulan','Kerusakan pada AC dan Freon AC habis')->count('kesimpulan');
-            $kerusakan5 = Hasil::where('kesimpulan','Kerusakan Rem')->count('kesimpulan');
-            $kerusakan6 = Hasil::where('kesimpulan','Mesin Overheat')->count('kesimpulan');
-            $kerusakan7 = Hasil::where('kesimpulan','Kerusakan Transmisi')->count('kesimpulan');
-            $kerusakan8 = Hasil::where('kesimpulan','Kerusakan Accu dan Engine mounting')->count('kesimpulan');
-            $kerusakan9= Hasil::where('kesimpulan','Tangki bahan bakar mengalami kerusakan')->count('kesimpulan');
-            $kerusakan10 = Hasil::where('kesimpulan','Pompa Oli Mengalami Kerusakan')->count('kesimpulan');
-            $kerusakan11 = Hasil::where('kesimpulan','Radiator mengalami kebocoran')->count('kesimpulan');
-            $kerusakan12 = Hasil::where('kesimpulan','Alternator rusak')->count('kesimpulan');
-            $kerusakan13 = Hasil::where('kesimpulan','Kopling rusak dan kampas kopling sudah aus')->count('kesimpulan');
-            $total = Hasil::count('kesimpulan');
+            $items = Hasil::with('rules')->orderBy('created_at')->get();
+            // $kerusakan1 = Hasil::where('kesimpulan','Kerusakan pada busi')->count('kesimpulan');
+            // $kerusakan2 = Hasil::where('kesimpulan','Injektor Bermasalah')->count('kesimpulan');
+            // $kerusakan3 = Hasil::where('kesimpulan','Premature Ignition')->count('kesimpulan');
+            // $kerusakan4 = Hasil::where('kesimpulan','Kerusakan pada AC dan Freon AC habis')->count('kesimpulan');
+            // $kerusakan5 = Hasil::where('kesimpulan','Kerusakan Rem')->count('kesimpulan');
+            // $kerusakan6 = Hasil::where('kesimpulan','Mesin Overheat')->count('kesimpulan');
+            // $kerusakan7 = Hasil::where('kesimpulan','Kerusakan Transmisi')->count('kesimpulan');
+            // $kerusakan8 = Hasil::where('kesimpulan','Kerusakan Accu dan Engine mounting')->count('kesimpulan');
+            // $kerusakan9= Hasil::where('kesimpulan','Tangki bahan bakar mengalami kerusakan')->count('kesimpulan');
+            // $kerusakan10 = Hasil::where('kesimpulan','Pompa Oli Mengalami Kerusakan')->count('kesimpulan');
+            // $kerusakan11 = Hasil::where('kesimpulan','Radiator mengalami kebocoran')->count('kesimpulan');
+            // $kerusakan12 = Hasil::where('kesimpulan','Alternator rusak')->count('kesimpulan');
+            // $kerusakan13 = Hasil::where('kesimpulan','Kopling rusak dan kampas kopling sudah aus')->count('kesimpulan');
+            $rules = Rules::all();
+            $total = Hasil::count();
 
-            return view('dashboard',compact('items','kerusakan1','kerusakan2','kerusakan3','kerusakan4','kerusakan5','kerusakan6','kerusakan7','kerusakan8','kerusakan9','kerusakan10','kerusakan11','kerusakan12','kerusakan13','total'));
+            // return view('dashboard',compact('items','kerusakan1','kerusakan2','kerusakan3','kerusakan4','kerusakan5','kerusakan6','kerusakan7','kerusakan8','kerusakan9','kerusakan10','kerusakan11','kerusakan12','kerusakan13','total'));
+            return view('dashboard',compact('items', 'rules', 'total'));
         }
     }
     public function indexhasildiagnosa(){
